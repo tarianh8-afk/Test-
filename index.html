@@ -301,7 +301,7 @@ h1{
 
 <script>
 const PASSWORD="nova123";
-const DISCORD_LINK="https://discord.gg/yx4JnBkfRK";
+const DISCORD_LINK="https://discord.gg/XaZSGVFvzV";
 
 function joinDiscord(){
   window.open(DISCORD_LINK,"_blank");
@@ -309,10 +309,10 @@ function joinDiscord(){
 
 /* LOAD SAVED DATA */
 let services = JSON.parse(localStorage.getItem("servicesData")) || [
-  {name:"Command Engine",percent:0,badge:"Down"},
-  {name:"Moderation Tools",percent:80,badge:"Operational"},
-  {name:"Automation System",percent:55,badge:"Updating"},
-  {name:"Beta Commands",percent:35,badge:"Beta"}
+  {name:"Discord",percent:100,badge:"operational"},
+  {name:"website",percent:80,badge:"beta"},
+  {name:"v3 cmdrs",percent:1,badge:"down"},
+  {name:"Beta Commands",percent:14,badge:"Beta"}
 ];
 
 function saveData(){
