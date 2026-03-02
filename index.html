@@ -21,21 +21,19 @@ body{
   overflow-x:hidden;
 }
 
-/* PARTICLES */
 canvas{
   position:fixed;
   inset:0;
   z-index:-1;
 }
 
-/* WRAPPER */
 .wrapper{
   max-width:750px;
   margin:auto;
   padding:60px 20px 100px;
 }
 
-/* FLOATING HEADER CARD */
+/* FLOATING HEADER */
 .header{
   padding:25px;
   border-radius:18px;
@@ -86,13 +84,19 @@ canvas{
 
 h1{margin:0;font-size:22px}
 
-.admin-btn{
+/* BUTTONS */
+.btn{
   background:transparent;
   border:1px solid var(--orange);
   color:var(--orange);
   padding:6px 14px;
   border-radius:40px;
   cursor:pointer;
+  transition:.3s;
+}
+.btn:hover{
+  background:var(--orange);
+  color:black;
 }
 
 .timer{
@@ -134,7 +138,7 @@ h1{margin:0;font-size:22px}
   height:8px;
   background:rgba(255,255,255,0.05);
   border-radius:40px;
-  overflow:hidden; /* clips shine */
+  overflow:hidden;
 }
 
 .progress-bar{
@@ -142,11 +146,10 @@ h1{margin:0;font-size:22px}
   background:linear-gradient(90deg,var(--orange),var(--yellow));
   border-radius:40px;
   position:relative;
-  overflow:hidden; /* important for clipping */
+  overflow:hidden;
   transition:width .6s ease;
 }
 
-/* Clipped Shine */
 .progress-bar::after{
   content:"";
   position:absolute;
@@ -231,7 +234,11 @@ h1{margin:0;font-size:22px}
         <div class="status-dot"></div>
         <h1>Custom Commands</h1>
       </div>
-      <button class="admin-btn" onclick="openModal()">Admin</button>
+
+      <div class="right">
+        <button class="btn" onclick="joinDiscord()">Discord</button>
+        <button class="btn" onclick="openModal()">Admin</button>
+      </div>
     </div>
     <div class="timer" id="timer"></div>
   </div>
@@ -249,6 +256,11 @@ h1{margin:0;font-size:22px}
 
 <script>
 const PASSWORD="nova123";
+const DISCORD_LINK="https://discord.gg/yx4JnBkfRK";
+
+function joinDiscord(){
+  window.open(DISCORD_LINK,"_blank");
+}
 
 let services=[
   {name:"Command Engine",percent:0,badge:"Down"},
