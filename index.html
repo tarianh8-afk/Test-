@@ -22,7 +22,6 @@ body{
   overflow-x:hidden;
 }
 
-/* PARTICLE CANVAS */
 canvas{
   position:fixed;
   inset:0;
@@ -31,20 +30,20 @@ canvas{
 
 /* WRAPPER */
 .wrapper{
-  max-width:800px;
+  max-width:850px;
   margin:auto;
-  padding:80px 20px 100px;
+  padding:90px 20px 120px;
 }
 
-/* FLOATING HEADER CARD */
+/* HEADER */
 .header{
-  padding:35px;
-  border-radius:24px;
+  padding:45px;
+  border-radius:28px;
   background:rgba(255,122,24,0.07);
   border:1px solid rgba(255,122,24,0.25);
-  margin-bottom:45px;
+  margin-bottom:50px;
   animation:float 6s ease-in-out infinite;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
 }
 
 @keyframes float{
@@ -54,39 +53,31 @@ canvas{
 
 .header-inner{
   display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:30px;
+  flex-direction:column;
+  gap:35px;
 }
 
-.title-area{
+/* TITLE ROW */
+.title-row{
   display:flex;
   align-items:center;
-  gap:18px;
+  gap:20px;
 }
 
-h1{
-  margin:0;
-  font-size:38px;
-  line-height:1.1;
-}
-
-.timer{
-  margin-top:10px;
-  font-size:20px;
-  font-weight:600;
-  color:var(--yellow);
-}
-
-/* STATUS DOT (Water Ripple) */
+/* PERFECT DOT */
 .status-dot{
-  width:18px;
-  height:18px;
+  width:22px;
+  height:22px;
+  min-width:22px;
+  min-height:22px;
+  aspect-ratio:1/1;
   border-radius:50%;
   background:var(--orange);
   position:relative;
-  box-shadow:0 0 15px var(--orange);
+  box-shadow:0 0 18px var(--orange);
+  flex-shrink:0;
 }
+
 .status-dot::after{
   content:"";
   position:absolute;
@@ -95,40 +86,55 @@ h1{
   background:inherit;
   animation:ripple 2.5s ease-out infinite;
 }
+
 @keyframes ripple{
   0%{transform:scale(1);opacity:.6}
   70%{transform:scale(2.8);opacity:0}
   100%{opacity:0}
 }
 
-/* BUTTONS */
+h1{
+  margin:0;
+  font-size:48px;
+  line-height:1.05;
+}
+
+.timer{
+  font-size:22px;
+  font-weight:600;
+  color:var(--yellow);
+}
+
+/* BUTTON ROW */
 .button-group{
   display:flex;
-  gap:14px;
+  gap:25px;
 }
 
 .btn{
+  flex:1;
+  padding:16px;
+  border-radius:60px;
+  border:2px solid var(--orange);
   background:transparent;
-  border:1px solid var(--orange);
   color:var(--orange);
-  padding:10px 24px;
-  border-radius:50px;
-  cursor:pointer;
+  font-size:18px;
   font-weight:600;
+  cursor:pointer;
   transition:.25s ease;
 }
 
 .btn:hover{
   background:var(--orange);
   color:black;
-  box-shadow:0 0 20px rgba(255,122,24,.7);
-  transform:translateY(-2px);
+  box-shadow:0 0 25px rgba(255,122,24,.8);
+  transform:translateY(-3px);
 }
 
 /* CARDS */
 .card{
-  padding:24px;
-  border-radius:20px;
+  padding:26px;
+  border-radius:22px;
   background:rgba(255,122,24,0.06);
   border:1px solid rgba(255,122,24,0.2);
   margin-bottom:25px;
@@ -136,7 +142,7 @@ h1{
 }
 
 .card:hover{
-  box-shadow:0 0 25px rgba(255,122,24,.35);
+  box-shadow:0 0 30px rgba(255,122,24,.35);
   transform:translateY(-3px);
 }
 
@@ -148,16 +154,16 @@ h1{
 }
 
 .badge{
-  font-size:12px;
-  padding:6px 14px;
+  font-size:13px;
+  padding:6px 16px;
   border-radius:40px;
   border:1px solid var(--orange);
   color:var(--orange);
 }
 
-/* PROGRESS BAR */
+/* PROGRESS */
 .progress{
-  height:10px;
+  height:12px;
   background:rgba(255,255,255,0.05);
   border-radius:40px;
   overflow:hidden;
@@ -172,7 +178,6 @@ h1{
   transition:width .6s ease;
 }
 
-/* Shine clipped inside */
 .progress-bar::after{
   content:"";
   position:absolute;
@@ -183,7 +188,7 @@ h1{
   background:linear-gradient(
     120deg,
     rgba(255,255,255,0) 0%,
-    rgba(255,255,255,.8) 50%,
+    rgba(255,255,255,.9) 50%,
     rgba(255,255,255,0) 100%
   );
   animation:shine 4s linear infinite;
@@ -196,7 +201,7 @@ h1{
 
 .percent{
   margin-top:10px;
-  font-size:14px;
+  font-size:15px;
   color:#ddd;
 }
 
@@ -220,16 +225,16 @@ h1{
 
 .modal-box{
   width:90%;
-  max-width:420px;
+  max-width:450px;
   background:#1a120a;
-  padding:30px;
-  border-radius:20px;
+  padding:35px;
+  border-radius:22px;
   border:1px solid var(--orange);
 }
 
 .modal-box input{
   width:100%;
-  padding:10px;
+  padding:12px;
   margin:10px 0;
   background:#222;
   border:1px solid #444;
@@ -239,7 +244,7 @@ h1{
 
 .modal-box button{
   width:100%;
-  padding:10px;
+  padding:12px;
   background:var(--orange);
   border:none;
   border-radius:8px;
@@ -248,19 +253,9 @@ h1{
 }
 
 /* MOBILE */
-@media (max-width:650px){
-  .header-inner{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  .button-group{
-    width:100%;
-  }
-
-  .button-group .btn{
-    flex:1;
-  }
+@media (max-width:700px){
+  h1{font-size:36px;}
+  .button-group{flex-direction:column;}
 }
 </style>
 </head>
@@ -271,13 +266,13 @@ h1{
 <div class="wrapper">
   <div class="header">
     <div class="header-inner">
-      
-      <div class="title-area">
-        <div class="status-dot"></div>
-        <div>
+
+      <div>
+        <div class="title-row">
+          <div class="status-dot"></div>
           <h1>Custom Commands</h1>
-          <div class="timer" id="timer"></div>
         </div>
+        <div class="timer" id="timer"></div>
       </div>
 
       <div class="button-group">
@@ -307,12 +302,12 @@ function joinDiscord(){
   window.open(DISCORD_LINK,"_blank");
 }
 
-/* LOAD SAVED DATA */
+/* DATA */
 let services = JSON.parse(localStorage.getItem("servicesData")) || [
-  {name:"Discord",percent:100,badge:"operational"},
-  {name:"Beta cmdr",percent:14,badge:"updating"},
-  {name:"v3 cmdr",percent:1,badge:"down"},
-  {name:"website status",percent:100,badge:"Beta"}
+  {name:"Website",percent:100,badge:"beta"},
+  {name:"Discord",percent:100,badge:"Operational"},
+  {name:"v3 cmdr",percent:1",badge:"down"},
+  {name:"Beta Commands",percent:14,badge:"Beta"}
 ];
 
 function saveData(){
@@ -397,12 +392,12 @@ resize();
 addEventListener("resize",resize);
 
 let particles=[];
-for(let i=0;i<70;i++){
+for(let i=0;i<80;i++){
   particles.push({
     x:Math.random()*canvas.width,
     y:Math.random()*canvas.height,
-    dx:(Math.random()-.5)*.5,
-    dy:(Math.random()-.5)*.5
+    dx:(Math.random()-.5)*.4,
+    dy:(Math.random()-.5)*.4
   });
 }
 
