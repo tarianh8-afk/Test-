@@ -9,15 +9,11 @@
 
 <style>
 :root{
-  --bg:#0f0b06;
-  --card:rgba(255,255,255,0.04);
-  --border:rgba(255,255,255,0.08);
-
   --orange:#ff7a18;
   --yellow:#ffd54a;
+  --red:#ff4d4d;
   --white:#ffffff;
   --muted:#c9b38c;
-  --red:#ff4d4d;
 }
 
 *{box-sizing:border-box}
@@ -25,8 +21,36 @@
 body{
   margin:0;
   font-family:'Inter',sans-serif;
-  background:radial-gradient(circle at top,#1a1208 0%,#0f0b06 70%);
+  background:#0f0b06;
   color:var(--white);
+  overflow-x:hidden;
+}
+
+/* ============================= */
+/* 🔥 PARTICLE CANVAS BACKGROUND */
+/* ============================= */
+
+canvas{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+}
+
+/* Glow overlay */
+body::before{
+  content:"";
+  position:fixed;
+  inset:-50%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,122,24,0.2), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255,213,74,0.15), transparent 40%);
+  animation:bgMove 20s ease-in-out infinite alternate;
+  z-index:-1;
+}
+
+@keyframes bgMove{
+  0%{transform:translate(0,0) scale(1);}
+  100%{transform:translate(-5%,5%) scale(1.1);}
 }
 
 /* Layout */
@@ -36,20 +60,33 @@ body{
   padding:40px 18px 60px;
 }
 
-/* HEADER */
+/* Floating Header */
 .header{
-  padding:24px;
-  border-radius:18px;
-  background:var(--card);
-  backdrop-filter:blur(12px);
-  border:1px solid var(--border);
+  padding:26px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.04);
+  backdrop-filter:blur(15px);
+  border:1px solid rgba(255,255,255,0.08);
   margin-bottom:35px;
+  animation:float 6s ease-in-out infinite;
+  box-shadow:0 0 30px rgba(255,122,24,0.15);
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
 }
 
 .header-top{
   display:flex;
   align-items:center;
-  gap:10px;
+  justify-content:space-between;
+}
+
+.left-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
 
 .status-dot{
@@ -57,6 +94,7 @@ body{
   height:10px;
   border-radius:50%;
   background:var(--orange);
+  box-shadow:0 0 10px var(--orange);
 }
 
 h1{
@@ -65,26 +103,43 @@ h1{
   font-weight:600;
 }
 
+.admin-btn{
+  padding:6px 14px;
+  font-size:12px;
+  border-radius:40px;
+  border:1px solid var(--orange);
+  background:transparent;
+  color:var(--orange);
+  cursor:pointer;
+  transition:.3s;
+}
+
+.admin-btn:hover{
+  background:var(--orange);
+  color:#000;
+  box-shadow:0 0 15px var(--orange);
+}
+
 .timer{
-  margin-top:10px;
+  margin-top:12px;
   font-size:14px;
-  font-weight:500;
   color:var(--muted);
 }
 
-/* CARDS */
+/* Cards */
 .card{
   padding:22px;
-  border-radius:18px;
-  background:var(--card);
-  backdrop-filter:blur(12px);
-  border:1px solid var(--border);
+  border-radius:20px;
+  background:rgba(255,255,255,0.03);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.06);
   margin-bottom:22px;
-  transition:.3s ease;
+  transition:.3s;
 }
 
 .card:hover{
-  transform:translateY(-3px);
+  transform:translateY(-4px);
+  box-shadow:0 0 25px rgba(255,122,24,0.2);
 }
 
 .card-top{
@@ -99,18 +154,18 @@ h1{
   font-weight:600;
 }
 
-/* Badge */
+/* Badges */
 .badge{
   font-size:12px;
   padding:5px 14px;
   border-radius:50px;
-  font-weight:500;
   border:1px solid;
 }
 
 .badge.active{
   color:var(--orange);
   border-color:var(--orange);
+  box-shadow:0 0 10px rgba(255,122,24,0.4);
 }
 
 .badge.maintenance{
@@ -134,13 +189,38 @@ h1{
   background:rgba(255,255,255,0.05);
   border-radius:50px;
   overflow:hidden;
+  position:relative;
 }
 
 .progress-bar{
   height:100%;
   border-radius:50px;
   background:linear-gradient(90deg,var(--orange),var(--yellow));
+  position:relative;
+  overflow:hidden;
   transition:width 1s ease;
+}
+
+/* ✨ Animated Shine Across Bars */
+.progress-bar::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-50%;
+  width:40%;
+  height:100%;
+  background:linear-gradient(
+    120deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.7) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  animation:shine 4s ease-in-out infinite;
+}
+
+@keyframes shine{
+  0%{left:-50%}
+  100%{left:150%}
 }
 
 .percent{
@@ -149,9 +229,7 @@ h1{
   color:var(--muted);
 }
 
-/* MOBILE */
 @media(max-width:480px){
-  .wrapper{padding:30px 14px}
   h1{font-size:19px}
 }
 </style>
@@ -159,12 +237,17 @@ h1{
 
 <body>
 
+<canvas id="particles"></canvas>
+
 <div class="wrapper">
 
 <div class="header">
   <div class="header-top">
-    <div class="status-dot"></div>
-    <h1>Custom Commands</h1>
+    <div class="left-header">
+      <div class="status-dot"></div>
+      <h1>Custom Commands</h1>
+    </div>
+    <button class="admin-btn">Admin</button>
   </div>
   <div class="timer" id="timer">Established: 0d 0h 0m 0s</div>
 </div>
@@ -175,6 +258,7 @@ h1{
 
 <script>
 
+/* SERVICES */
 const services=[
   {name:"Command Engine",percent:0,status:"offline",label:"Down"},
   {name:"Moderation Tools",percent:80,status:"active",label:"Operational"},
@@ -200,7 +284,6 @@ function render(){
     container.appendChild(card);
   });
 }
-
 render();
 
 /* TIMER */
@@ -216,9 +299,49 @@ function updateTimer(){
   document.getElementById("timer").textContent=
   `Established: ${d}d ${h}h ${m}m ${s}s`;
 }
-
 setInterval(updateTimer,1000);
 updateTimer();
+
+/* PARTICLE SYSTEM */
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+let particles=[];
+let w,h;
+
+function resize(){
+  w=canvas.width=window.innerWidth;
+  h=canvas.height=window.innerHeight;
+}
+window.addEventListener("resize",resize);
+resize();
+
+for(let i=0;i<80;i++){
+  particles.push({
+    x:Math.random()*w,
+    y:Math.random()*h,
+    r:Math.random()*2+1,
+    dx:(Math.random()-0.5)*0.5,
+    dy:(Math.random()-0.5)*0.5
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle="rgba(255,180,100,0.6)";
+  particles.forEach(p=>{
+    p.x+=p.dx;
+    p.y+=p.dy;
+
+    if(p.x<0||p.x>w) p.dx*=-1;
+    if(p.y<0||p.y>h) p.dy*=-1;
+
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fill();
+  });
+  requestAnimationFrame(animate);
+}
+animate();
 
 </script>
 
