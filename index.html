@@ -32,19 +32,31 @@ canvas{
 .wrapper{
   max-width:750px;
   margin:auto;
-  padding:40px 20px 80px;
+  padding:60px 20px 100px;
 }
 
-/* HEADER */
+/* FLOATING HEADER CARD */
 .header{
   padding:25px;
   border-radius:18px;
   background:rgba(255,122,24,0.08);
   border:1px solid rgba(255,122,24,0.25);
   margin-bottom:30px;
+  animation:float 6s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0px);}
+  50%{transform:translateY(-12px);}
 }
 
 .header-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.left{
   display:flex;
   align-items:center;
   gap:12px;
@@ -73,6 +85,15 @@ canvas{
 }
 
 h1{margin:0;font-size:22px}
+
+.admin-btn{
+  background:transparent;
+  border:1px solid var(--orange);
+  color:var(--orange);
+  padding:6px 14px;
+  border-radius:40px;
+  cursor:pointer;
+}
 
 .timer{
   margin-top:10px;
@@ -108,34 +129,43 @@ h1{margin:0;font-size:22px}
   color:var(--orange);
 }
 
+/* PROGRESS */
 .progress{
   height:8px;
   background:rgba(255,255,255,0.05);
   border-radius:40px;
-  overflow:hidden;
+  overflow:hidden; /* clips shine */
 }
+
 .progress-bar{
   height:100%;
   background:linear-gradient(90deg,var(--orange),var(--yellow));
   border-radius:40px;
   position:relative;
+  overflow:hidden; /* important for clipping */
+  transition:width .6s ease;
 }
+
+/* Clipped Shine */
 .progress-bar::after{
   content:"";
   position:absolute;
   top:0;
-  left:-50%;
-  width:40%;
+  left:-40%;
+  width:30%;
   height:100%;
-  background:linear-gradient(120deg,
+  background:linear-gradient(
+    120deg,
     rgba(255,255,255,0) 0%,
     rgba(255,255,255,.8) 50%,
-    rgba(255,255,255,0) 100%);
-  animation:shine 5s linear infinite;
+    rgba(255,255,255,0) 100%
+  );
+  animation:shine 4s linear infinite;
 }
+
 @keyframes shine{
-  from{left:-50%}
-  to{left:150%}
+  from{left:-40%;}
+  to{left:140%;}
 }
 
 .percent{
@@ -144,21 +174,7 @@ h1{margin:0;font-size:22px}
   color:#ddd;
 }
 
-/* ADMIN BUTTON */
-.admin-btn{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:var(--orange);
-  border:none;
-  padding:12px 18px;
-  border-radius:50px;
-  font-weight:600;
-  cursor:pointer;
-  box-shadow:0 0 20px rgba(255,122,24,.5);
-}
-
-/* ADMIN MODAL */
+/* MODAL */
 .modal{
   position:fixed;
   inset:0;
@@ -182,26 +198,24 @@ h1{margin:0;font-size:22px}
   padding:30px;
   border-radius:20px;
   border:1px solid var(--orange);
-  text-align:center;
 }
 
 .modal-box input{
   width:100%;
-  padding:12px;
-  margin:15px 0;
+  padding:10px;
+  margin:10px 0;
   background:#222;
   border:1px solid #444;
   color:white;
-  border-radius:10px;
+  border-radius:8px;
 }
 
 .modal-box button{
   width:100%;
-  padding:12px;
+  padding:10px;
   background:var(--orange);
   border:none;
-  border-radius:10px;
-  font-weight:600;
+  border-radius:8px;
   cursor:pointer;
 }
 </style>
@@ -213,8 +227,11 @@ h1{margin:0;font-size:22px}
 <div class="wrapper">
   <div class="header">
     <div class="header-top">
-      <div class="status-dot"></div>
-      <h1>Custom Commands</h1>
+      <div class="left">
+        <div class="status-dot"></div>
+        <h1>Custom Commands</h1>
+      </div>
+      <button class="admin-btn" onclick="openModal()">Admin</button>
     </div>
     <div class="timer" id="timer"></div>
   </div>
@@ -222,10 +239,8 @@ h1{margin:0;font-size:22px}
   <div id="services"></div>
 </div>
 
-<button class="admin-btn" onclick="openModal()">Admin</button>
-
 <div class="modal" id="modal">
-  <div class="modal-box">
+  <div class="modal-box" id="modalContent">
     <h2 style="color:var(--orange)">Admin Access</h2>
     <input type="password" id="pass" placeholder="Enter Password">
     <button onclick="login()">Login</button>
@@ -245,7 +260,7 @@ let services=[
 function render(){
   const container=document.getElementById("services");
   container.innerHTML="";
-  services.forEach(s=>{
+  services.forEach((s,i)=>{
     container.innerHTML+=`
     <div class="card">
       <div class="card-top">
@@ -261,7 +276,7 @@ function render(){
 }
 render();
 
-/* Timer */
+/* TIMER */
 const start=new Date("2026-01-01T00:00:00Z");
 setInterval(()=>{
   const diff=new Date()-start;
@@ -273,15 +288,31 @@ setInterval(()=>{
   `Established: ${d}d ${h}h ${m}m ${s}s`;
 },1000);
 
-/* Admin Modal */
+/* ADMIN */
 function openModal(){
   document.getElementById("modal").classList.add("active");
 }
 function login(){
   if(document.getElementById("pass").value===PASSWORD){
-    alert("Access Granted (Admin panel can be expanded next)");
-    document.getElementById("modal").classList.remove("active");
+    loadAdminPanel();
   }
+}
+function loadAdminPanel(){
+  const box=document.getElementById("modalContent");
+  box.innerHTML="<h2 style='color:var(--orange)'>Admin Panel</h2>";
+  services.forEach((s,i)=>{
+    box.innerHTML+=`
+      <strong>${s.name}</strong>
+      <input type="number" value="${s.percent}" onchange="updatePercent(${i},this.value)">
+      <input type="text" value="${s.badge}" onchange="updateBadge(${i},this.value)">
+    `;
+  });
+  box.innerHTML+=`<button onclick="closeModal()">Close</button>`;
+}
+function updatePercent(i,val){services[i].percent=val;render();}
+function updateBadge(i,val){services[i].badge=val;render();}
+function closeModal(){
+  document.getElementById("modal").classList.remove("active");
 }
 
 /* PARTICLES */
@@ -314,5 +345,6 @@ function animate(){
 }
 animate();
 </script>
+
 </body>
 </html>
