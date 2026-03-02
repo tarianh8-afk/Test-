@@ -4,71 +4,50 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Custom Commands</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --orange:#ff7a18;
   --yellow:#ffd54a;
+  --green:#22c55e;
   --red:#ff4d4d;
   --white:#ffffff;
-  --muted:#c9b38c;
 }
 
 *{box-sizing:border-box}
-
 body{
   margin:0;
   font-family:'Inter',sans-serif;
   background:#0f0b06;
-  color:var(--white);
+  color:white;
   overflow-x:hidden;
 }
 
-/* ================= PARTICLE BACKGROUND ================= */
-
+/* PARTICLE CANVAS */
 canvas{
   position:fixed;
   inset:0;
-  z-index:-2;
-}
-
-body::before{
-  content:"";
-  position:fixed;
-  inset:-50%;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(255,122,24,0.2), transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(255,213,74,0.15), transparent 40%);
-  animation:bgMove 20s ease-in-out infinite alternate;
   z-index:-1;
 }
 
-@keyframes bgMove{
-  0%{transform:translate(0,0) scale(1);}
-  100%{transform:translate(-5%,5%) scale(1.1);}
-}
-
-/* ================= LAYOUT ================= */
-
+/* LAYOUT */
 .wrapper{
-  max-width:820px;
+  max-width:850px;
   margin:auto;
-  padding:40px 18px 60px;
+  padding:40px 20px 60px;
 }
 
-/* ================= FLOATING HEADER ================= */
-
+/* HEADER */
 .header{
-  padding:26px;
+  padding:28px;
   border-radius:20px;
   background:rgba(255,255,255,0.04);
   backdrop-filter:blur(15px);
   border:1px solid rgba(255,255,255,0.08);
   margin-bottom:35px;
   animation:float 6s ease-in-out infinite;
-  box-shadow:0 0 30px rgba(255,122,24,0.15);
+  box-shadow:0 0 40px rgba(255,122,24,0.15);
 }
 
 @keyframes float{
@@ -78,49 +57,39 @@ body::before{
 
 .header-top{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
 }
 
-.left-header{
+.left{
   display:flex;
   align-items:center;
   gap:12px;
 }
 
-/* ================= WATER DROP STATUS DOT ================= */
+h1{margin:0;font-size:22px}
 
+/* STATUS DOT */
 .status-dot{
-  position:relative;
   width:12px;
   height:12px;
   border-radius:50%;
-  background:var(--orange);
-  box-shadow:0 0 10px var(--orange);
+  background:var(--green);
+  position:relative;
+  box-shadow:0 0 12px var(--green);
 }
-
 .status-dot::before{
   content:"";
   position:absolute;
   inset:0;
   border-radius:50%;
-  background:var(--orange);
+  background:inherit;
   animation:ripple 2.5s ease-out infinite;
-  opacity:0.6;
 }
-
 @keyframes ripple{
-  0%{transform:scale(1);opacity:0.6;}
-  70%{transform:scale(2.8);opacity:0;}
-  100%{transform:scale(2.8);opacity:0;}
-}
-
-/* ================= TEXT ================= */
-
-h1{
-  margin:0;
-  font-size:22px;
-  font-weight:600;
+  0%{transform:scale(1);opacity:.6}
+  70%{transform:scale(2.5);opacity:0}
+  100%{opacity:0}
 }
 
 .admin-btn{
@@ -130,75 +99,59 @@ h1{
   background:transparent;
   color:var(--orange);
   cursor:pointer;
-  transition:.3s;
-}
-
-.admin-btn:hover{
-  background:var(--orange);
-  color:#000;
-  box-shadow:0 0 15px var(--orange);
 }
 
 .timer{
   margin-top:12px;
   font-size:14px;
-  color:var(--muted);
+  opacity:.8;
 }
 
-/* ================= CARDS ================= */
-
+/* CARDS */
 .card{
   padding:22px;
-  border-radius:20px;
+  border-radius:18px;
   background:rgba(255,255,255,0.03);
   backdrop-filter:blur(10px);
   border:1px solid rgba(255,255,255,0.06);
-  margin-bottom:22px;
+  margin-bottom:20px;
   transition:.3s;
 }
-
 .card:hover{
   transform:translateY(-4px);
-  box-shadow:0 0 25px rgba(255,122,24,0.2);
+  box-shadow:0 0 30px rgba(255,122,24,.25);
 }
 
 .card-top{
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  margin-bottom:16px;
+  margin-bottom:14px;
 }
 
 .badge{
   font-size:12px;
   padding:5px 14px;
-  border-radius:50px;
+  border-radius:40px;
   border:1px solid;
 }
-
-.badge.active{color:var(--orange);border-color:var(--orange)}
-.badge.maintenance{color:var(--yellow);border-color:var(--yellow)}
-.badge.offline{color:var(--red);border-color:var(--red)}
-.badge.beta{color:white;border-color:white}
-
-/* ================= PROGRESS ================= */
+.active{color:var(--green);border-color:var(--green)}
+.maintenance{color:var(--yellow);border-color:var(--yellow)}
+.offline{color:var(--red);border-color:var(--red)}
+.beta{color:white;border-color:white}
 
 .progress{
   height:8px;
   background:rgba(255,255,255,0.05);
-  border-radius:50px;
+  border-radius:40px;
   overflow:hidden;
 }
-
 .progress-bar{
   height:100%;
-  border-radius:50px;
+  border-radius:40px;
   background:linear-gradient(90deg,var(--orange),var(--yellow));
   position:relative;
-  overflow:hidden;
-  transition:width 1s ease;
+  transition:width 1.2s ease;
 }
-
 .progress-bar::after{
   content:"";
   position:absolute;
@@ -208,215 +161,219 @@ h1{
   height:100%;
   background:linear-gradient(120deg,
     rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0.8) 50%,
+    rgba(255,255,255,.8) 50%,
     rgba(255,255,255,0) 100%);
-  animation:shine 5s ease-in-out infinite;
+  animation:shine 6s linear infinite;
 }
-
 @keyframes shine{
-  0%{left:-50%}
-  100%{left:150%}
+  from{left:-50%}
+  to{left:150%}
 }
 
-/* ================= ADMIN MODAL ================= */
-
-.modal{
+/* SLIDE ADMIN PANEL */
+.admin-panel{
   position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.75);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:10;
-}
-
-.modal-content{
+  top:0;
+  right:-420px;
+  width:400px;
+  height:100%;
   background:#1a120a;
   padding:25px;
-  border-radius:15px;
-  width:90%;
-  max-width:400px;
+  transition:.4s ease;
+  overflow-y:auto;
+  z-index:10;
+  box-shadow:-10px 0 40px rgba(0,0,0,.6);
 }
+.admin-panel.open{right:0}
 
-.modal input{
+.admin-panel input, .admin-panel select{
   width:100%;
-  padding:8px;
   margin-bottom:10px;
+  padding:8px;
+  background:#111;
+  border:1px solid #333;
+  color:white;
 }
 
-.modal button{
-  padding:8px 12px;
-  margin-top:5px;
+.lock-message{
+  color:var(--red);
+  font-size:14px;
 }
 
-@media(max-width:480px){
-  h1{font-size:19px}
+@media(max-width:600px){
+  .admin-panel{width:100%}
 }
 </style>
 </head>
-
 <body>
 
-<canvas id="particles"></canvas>
+<canvas id="bg"></canvas>
 
 <div class="wrapper">
-<div class="header">
-  <div class="header-top">
-    <div class="left-header">
-      <div class="status-dot"></div>
-      <h1>Custom Commands</h1>
+  <div class="header">
+    <div class="header-top">
+      <div class="left">
+        <div class="status-dot" id="statusDot"></div>
+        <h1>Custom Commands</h1>
+      </div>
+      <button class="admin-btn" onclick="toggleAdmin()">Admin</button>
     </div>
-    <button class="admin-btn" onclick="openAdmin()">Admin</button>
+    <div class="timer" id="timer"></div>
   </div>
-  <div class="timer" id="timer"></div>
+
+  <div id="services"></div>
 </div>
 
-<div id="services"></div>
-</div>
-
-<!-- ADMIN MODAL -->
-<div class="modal" id="adminModal">
-  <div class="modal-content">
-    <div id="passwordSection">
-      <h3>Enter Password</h3>
-      <input type="password" id="passwordInput">
-      <button onclick="checkPassword()">Login</button>
-    </div>
-
-    <div id="panelSection" style="display:none;">
-      <h3>Admin Panel</h3>
-      <div id="adminControls"></div>
-      <button onclick="closeAdmin()">Close</button>
-    </div>
+<div class="admin-panel" id="adminPanel">
+  <h3>Admin Login</h3>
+  <div id="loginSection">
+    <input type="password" id="passwordInput" placeholder="Enter Password">
+    <button onclick="checkPassword()">Login</button>
+    <div class="lock-message" id="lockMessage"></div>
   </div>
+  <div id="controlSection" style="display:none;"></div>
 </div>
 
 <script>
-
 const PASSWORD="nova123";
+let attempts=0;
+let lockedUntil=0;
 
-let services=[
-  {name:"Command Engine",percent:0,status:"offline",label:"Down"},
-  {name:"Moderation Tools",percent:80,status:"active",label:"Operational"},
-  {name:"Automation System",percent:55,status:"maintenance",label:"Updating"},
-  {name:"Beta Commands",percent:35,status:"beta",label:"Beta"}
+let services=JSON.parse(localStorage.getItem("services"))||[
+  {name:"Command Engine",percent:0,status:"offline"},
+  {name:"Moderation Tools",percent:85,status:"active"},
+  {name:"Automation System",percent:60,status:"maintenance"}
 ];
+
+function save(){localStorage.setItem("services",JSON.stringify(services));}
 
 function render(){
   const container=document.getElementById("services");
   container.innerHTML="";
-  services.forEach((service,i)=>{
+  services.forEach((s,i)=>{
     container.innerHTML+=`
     <div class="card">
       <div class="card-top">
-        <div>${service.name}</div>
-        <div class="badge ${service.status}">${service.label}</div>
+        <div>${s.name}</div>
+        <div class="badge ${s.status}">${s.status}</div>
       </div>
       <div class="progress">
-        <div class="progress-bar" style="width:${service.percent}%"></div>
+        <div class="progress-bar" style="width:${s.percent}%"></div>
       </div>
-      <div>${service.percent}%</div>
+      <div>${s.percent}%</div>
     </div>`;
   });
+  updateStatusDot();
 }
+
+function updateStatusDot(){
+  const dot=document.getElementById("statusDot");
+  let color="var(--green)";
+  if(services.some(s=>s.status==="offline")) color="var(--red)";
+  else if(services.some(s=>s.status==="maintenance")) color="var(--yellow)";
+  dot.style.background=color;
+  dot.style.boxShadow=`0 0 12px ${color}`;
+}
+
 render();
 
 /* TIMER */
-const startDate=new Date("2026-01-01T00:00:00Z");
-function updateTimer(){
-  const now=new Date();
-  const diff=now-startDate;
-  const d=Math.floor(diff/(1000*60*60*24));
-  const h=Math.floor((diff/(1000*60*60))%24);
-  const m=Math.floor((diff/(1000*60))%60);
-  const s=Math.floor((diff/1000)%60);
+const start=new Date("2026-01-01T00:00:00Z");
+setInterval(()=>{
+  const diff=new Date()-start;
+  const d=Math.floor(diff/86400000);
+  const h=Math.floor(diff/3600000)%24;
+  const m=Math.floor(diff/60000)%60;
+  const s=Math.floor(diff/1000)%60;
   document.getElementById("timer").textContent=
   `Established: ${d}d ${h}h ${m}m ${s}s`;
-}
-setInterval(updateTimer,1000);
-updateTimer();
+},1000);
 
 /* ADMIN */
-function openAdmin(){
-  document.getElementById("adminModal").style.display="flex";
-}
-function closeAdmin(){
-  document.getElementById("adminModal").style.display="none";
+function toggleAdmin(){
+  document.getElementById("adminPanel").classList.toggle("open");
 }
 function checkPassword(){
-  const input=document.getElementById("passwordInput").value;
-  if(input===PASSWORD){
-    document.getElementById("passwordSection").style.display="none";
-    document.getElementById("panelSection").style.display="block";
-    loadAdminControls();
+  if(Date.now()<lockedUntil){
+    document.getElementById("lockMessage").textContent="Locked. Wait 30 seconds.";
+    return;
+  }
+  if(document.getElementById("passwordInput").value===PASSWORD){
+    document.getElementById("loginSection").style.display="none";
+    loadControls();
   } else {
-    alert("Wrong password");
+    attempts++;
+    if(attempts>=5){
+      lockedUntil=Date.now()+30000;
+      attempts=0;
+    }
+    document.getElementById("lockMessage").textContent="Wrong password.";
   }
 }
-function loadAdminControls(){
-  const container=document.getElementById("adminControls");
-  container.innerHTML="";
-  services.forEach((service,i)=>{
-    container.innerHTML+=`
-      <div>
-        <strong>${service.name}</strong><br>
-        Percent:
-        <input type="number" value="${service.percent}" onchange="updatePercent(${i},this.value)"><br>
-        Badge Name:
-        <input type="text" value="${service.label}" onchange="updateLabel(${i},this.value)">
-        <hr>
-      </div>`;
+
+function loadControls(){
+  const c=document.getElementById("controlSection");
+  c.style.display="block";
+  c.innerHTML="<h3>Service Controls</h3>";
+  services.forEach((s,i)=>{
+    c.innerHTML+=`
+    <strong>${s.name}</strong>
+    <input type="number" value="${s.percent}" onchange="updatePercent(${i},this.value)">
+    <select onchange="updateStatus(${i},this.value)">
+      <option value="active">active</option>
+      <option value="maintenance">maintenance</option>
+      <option value="offline">offline</option>
+      <option value="beta">beta</option>
+    </select>
+    <button onclick="removeService(${i})">Remove</button>
+    <hr>`;
   });
+  c.innerHTML+=`
+  <h3>Add Service</h3>
+  <input type="text" id="newName" placeholder="Service Name">
+  <button onclick="addService()">Add</button>`;
 }
-function updatePercent(i,value){
-  services[i].percent=value;
-  render();
-}
-function updateLabel(i,value){
-  services[i].label=value;
-  render();
+
+function updatePercent(i,v){services[i].percent=v;save();render();}
+function updateStatus(i,v){services[i].status=v;save();render();}
+function removeService(i){services.splice(i,1);save();render();loadControls();}
+function addService(){
+  const name=document.getElementById("newName").value;
+  if(name){
+    services.push({name,percent:0,status:"active"});
+    save();render();loadControls();
+  }
 }
 
 /* PARTICLES */
-const canvas=document.getElementById("particles");
+const canvas=document.getElementById("bg");
 const ctx=canvas.getContext("2d");
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+resize();addEventListener("resize",resize);
+
 let particles=[];
-let w,h;
-
-function resize(){
-  w=canvas.width=window.innerWidth;
-  h=canvas.height=window.innerHeight;
-}
-window.addEventListener("resize",resize);
-resize();
-
-for(let i=0;i<70;i++){
+for(let i=0;i<50;i++){
   particles.push({
-    x:Math.random()*w,
-    y:Math.random()*h,
-    r:Math.random()*2+1,
-    dx:(Math.random()-0.5)*0.4,
-    dy:(Math.random()-0.5)*0.4
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    dx:(Math.random()-.5)*.5,
+    dy:(Math.random()-.5)*.5
   });
 }
-
 function animate(){
-  ctx.clearRect(0,0,w,h);
-  ctx.fillStyle="rgba(255,180,100,0.6)";
+  ctx.clearRect(0,0,canvas.width,canvas.height);
   particles.forEach(p=>{
-    p.x+=p.dx;
-    p.y+=p.dy;
-    if(p.x<0||p.x>w)p.dx*=-1;
-    if(p.y<0||p.y>h)p.dy*=-1;
+    p.x+=p.dx;p.y+=p.dy;
+    if(p.x<0||p.x>canvas.width)p.dx*=-1;
+    if(p.y<0||p.y>canvas.height)p.dy*=-1;
     ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.arc(p.x,p.y,2,0,Math.PI*2);
+    ctx.fillStyle="rgba(255,180,100,.7)";
     ctx.fill();
   });
   requestAnimationFrame(animate);
 }
 animate();
-
 </script>
-
 </body>
 </html>
