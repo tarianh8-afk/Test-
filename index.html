@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Commands</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#1a1208;
+  --card:#24180c;
+  --border:#3a2814;
+  --text:#ffffff;
+  --muted:#fcd9a6;
+
+  --orange:#f97316;
+  --yellow:#facc15;
+  --white:#ffffff;
+  --red:#ef4444;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background:linear-gradient(180deg,#1a1208 0%,#140d05 100%);
+  color:var(--text);
+}
+
+.wrapper{
+  max-width:900px;
+  margin:auto;
+  padding:24px 16px 60px;
+}
+
+/* HEADER */
+.header{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:30px;
+}
+
+.header-top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.status-dot{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:var(--orange);
+  box-shadow:0 0 10px var(--orange);
+  position:relative;
+}
+
+.status-dot::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  border:2px solid var(--yellow);
+  animation:ripple 2.5s infinite;
+}
+
+@keyframes ripple{
+  0%{transform:scale(1);opacity:.6}
+  100%{transform:scale(2.2);opacity:0}
+}
+
+h1{margin:0;font-size:20px;font-weight:700}
+
+.timer{
+  margin-top:12px;
+  font-size:14px;
+  font-weight:600;
+  background:linear-gradient(120deg,var(--orange),var(--yellow),#fff,var(--yellow),var(--orange));
+  background-size:400% auto;
+  background-clip:text;
+  -webkit-background-clip:text;
+  color:transparent;
+  -webkit-text-fill-color:transparent;
+  animation:shine 12s ease-in-out infinite;
+}
+
+@keyframes shine{
+  0%{background-position:-200% center}
+  40%{background-position:200% center}
+  100%{background-position:200% center}
+}
+
+/* CARDS */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:20px;
+}
+
+.card-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.service-name{font-weight:600}
+
+.badge{
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:600;
+  border:1px solid;
+}
+
+.badge.active{color:var(--orange);border-color:var(--orange)}
+.badge.maintenance{color:var(--yellow);border-color:var(--yellow)}
+.badge.offline{color:var(--red);border-color:var(--red)}
+.badge.beta{color:var(--white);border-color:var(--white)}
+
+.progress{
+  height:14px;
+  background:#3a2814;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  width:0;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--orange),var(--yellow));
+  transition:width 1s ease;
+}
+
+.percent{margin-top:6px;font-size:13px;color:var(--muted)}
+
+/* ADMIN PANEL */
+.admin-panel{
+  position:fixed;
+  top:0;
+  right:-400px;
+  width:350px;
+  height:100%;
+  background:#111;
+  padding:20px;
+  overflow:auto;
+  transition:.4s ease;
+  z-index:999;
+  border-left:2px solid var(--orange);
+}
+
+.admin-panel.active{right:0}
+
+.admin-panel h2{margin-top:0;color:var(--orange)}
+
+.admin-panel label{
+  display:block;
+  margin-top:12px;
+  font-size:13px;
+}
+
+.admin-panel input,
+.admin-panel select{
+  width:100%;
+  padding:6px;
+  margin-top:4px;
+  background:#222;
+  border:1px solid #333;
+  color:white;
+  border-radius:6px;
+}
+
+.admin-panel button{
+  margin-top:15px;
+  padding:8px;
+  width:100%;
+  background:var(--orange);
+  border:none;
+  border-radius:6px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+@media(max-width:480px){
+  .admin-panel{width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<!-- Hidden corner trigger -->
+<div onclick="openLogin()" style="position:fixed;top:10px;right:10px;width:35px;height:35px;cursor:pointer;opacity:0;z-index:1000;"></div>
+
+<div class="wrapper">
+
+<div class="header">
+  <div class="header-top">
+    <div class="status-dot"></div>
+    <h1>Custom Commands</h1>
+  </div>
+  <div class="timer" id="timer">Established: 0d 0h 0m 0s</div>
+</div>
+
+<div id="services"></div>
+
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="adminLogin" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:1001;">
+  <div style="background:#1a1208;padding:25px;border-radius:12px;width:90%;max-width:320px;border:1px solid #f97316;text-align:center;">
+    <h3 style="margin-top:0;color:#f97316;">Admin Access</h3>
+    <input type="password" id="adminPassword" placeholder="Enter Password" style="width:100%;padding:8px;margin-top:10px;border-radius:6px;border:1px solid #333;background:#222;color:white;">
+    <div id="loginError" style="color:#ef4444;font-size:13px;margin-top:8px;display:none;">Incorrect password</div>
+    <button onclick="checkPassword()" style="margin-top:12px;width:100%;padding:8px;background:#f97316;border:none;border-radius:6px;font-weight:600;">Login</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-panel" id="adminPanel">
+  <h2>Admin Panel</h2>
+  <div id="adminControls"></div>
+</div>
+
+<script>
+const ADMIN_PASSWORD="Nova2026";
+
+let services=JSON.parse(localStorage.getItem("services"))||[
+  {name:"Command Engine",percent:100,status:"active",label:"Operational"},
+  {name:"Moderation Tools",percent:80,status:"active",label:"Operational"},
+  {name:"Automation System",percent:55,status:"maintenance",label:"Updating"},
+  {name:"Beta Commands",percent:35,status:"beta",label:"Beta"}
+];
+
+function save(){localStorage.setItem("services",JSON.stringify(services));}
+
+function render(){
+  const container=document.getElementById("services");
+  container.innerHTML="";
+  services.forEach((service,index)=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`
+      <div class="card-top">
+        <div class="service-name">${service.name}</div>
+        <div class="badge ${service.status}">${service.label}</div>
+      </div>
+      <div class="progress">
+        <div class="progress-bar" style="width:${service.percent}%"></div>
+      </div>
+      <div class="percent">${service.percent}%</div>
+    `;
+    container.appendChild(card);
+  });
+}
+render();
+
+function renderAdmin(){
+  const panel=document.getElementById("adminControls");
+  panel.innerHTML="";
+  services.forEach((service,index)=>{
+    panel.innerHTML+=`
+      <label>${service.name}</label>
+      <select onchange="updateStatus(${index},this.value)">
+        <option value="active" ${service.status=="active"?"selected":""}>Active</option>
+        <option value="maintenance" ${service.status=="maintenance"?"selected":""}>Maintenance</option>
+        <option value="offline" ${service.status=="offline"?"selected":""}>Offline</option>
+        <option value="beta" ${service.status=="beta"?"selected":""}>Beta</option>
+      </select>
+      <input type="text" value="${service.label}" onchange="updateLabel(${index},this.value)">
+      <input type="number" min="0" max="100" value="${service.percent}" onchange="updatePercent(${index},this.value)">
+      <hr>
+    `;
+  });
+}
+
+function updateStatus(i,val){services[i].status=val;save();render();}
+function updateLabel(i,val){services[i].label=val;save();render();}
+function updatePercent(i,val){services[i].percent=val;save();render();}
+
+function openLogin(){document.getElementById("adminLogin").style.display="flex";}
+function checkPassword(){
+  const input=document.getElementById("adminPassword").value;
+  if(input===ADMIN_PASSWORD){
+    document.getElementById("adminLogin").style.display="none";
+    document.getElementById("adminPanel").classList.add("active");
+    renderAdmin();
+  }else{
+    document.getElementById("loginError").style.display="block";
+  }
+}
+
+/* TIMER */
+const startDate=new Date("2026-01-01T00:00:00Z");
+function updateTimer(){
+  const now=new Date();
+  const diff=now-startDate;
+  const d=Math.floor(diff/(1000*60*60*24));
+  const h=Math.floor((diff/(1000*60*60))%24);
+  const m=Math.floor((diff/(1000*60))%60);
+  const s=Math.floor((diff/1000)%60);
+  document.getElementById("timer").textContent=
+  `Established: ${d}d ${h}h ${m}m ${s}s`;
+}
+setInterval(updateTimer,1000);
+updateTimer();
+</script>
+
+</body>
+</html>
